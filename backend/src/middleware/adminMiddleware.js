@@ -27,13 +27,15 @@ const adminMiddleware = async (req,res,next)=>{
             throw new Error("User Doesn't Exist");
         }
 
-        // Redis ke blockList mein persent toh nahi hai
+        // Check if its present in redis
 
         const IsBlocked = await redisClient.exists(`token:${token}`);
 
         if(IsBlocked)
             throw new Error("Invalid Token");
 
+
+//store the document of user/admin from the db
         req.result = result;
 
 

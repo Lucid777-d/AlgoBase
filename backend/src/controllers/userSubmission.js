@@ -4,7 +4,7 @@ const User = require("../models/user");
 const {getLanguageById,submitBatch,submitToken} = require("../utils/problemUtility");
 
 const submitCode = async (req,res)=>{
-   
+    
     // 
     try{
       
@@ -26,7 +26,7 @@ const submitCode = async (req,res)=>{
        const problem =  await Problem.findById(problemId);
     //    testcases(Hidden)
     
-    //   Kya apne submission store kar du pehle....
+    //   Kya apne submission store kar du pehle
     const submittedResult = await Submission.create({
           userId,
           problemId,

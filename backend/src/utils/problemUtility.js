@@ -3,20 +3,20 @@ const axios = require('axios');
 
 const getLanguageById = (lang)=>{
 
-    const language = {
+    const language = {//its an object so on call will it run only
         "c++":54,
         "java":62,
         "javascript":63
     }
 
 
-    return language[lang.toLowerCase()];
+    return language[lang.toLowerCase()];// simplified-> language[java]
 }
 
 
 const submitBatch = async (submissions)=>{
 
-
+//options is just a configuration object — it doesn't "do" anything by itself, it just packages up everything needed for the request in the exact shape Judge0's API expects
 const options = {
   method: 'POST',
   url: 'https://judge0-ce.p.rapidapi.com/submissions/batch',
@@ -32,7 +32,7 @@ const options = {
     submissions
   }
 };
-
+//axios.request(options) is the line that actually uses this config to fire the real request.
 async function fetchData() {
 	try {
 		const response = await axios.request(options);

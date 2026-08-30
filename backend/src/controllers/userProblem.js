@@ -25,7 +25,7 @@ const createProblem = async (req,res)=>{
 
         const languageId = getLanguageById(language);
           
-        // I am creating Batch submission
+        // Creating Batch submission
         const submissions = visibleTestCases.map((testcase)=>({
             source_code:completeCode,
             language_id: languageId,
@@ -39,7 +39,7 @@ const createProblem = async (req,res)=>{
 
         const resultToken = submitResult.map((value)=> value.token);
 
-        // ["db54881d-bcf5-4c7b-a2e3-d33fe7e25de7","ecc52a9b-ea80-4a00-ad50-4ab6cc3bb2a1","1b35ec3b-5776-48ef-b646-d5522bdeb2cc"]
+        // ["db54881d-bcf5-4c7b-a2e3-d33fe7e25de7","ecc52a9b-ea80-4a00-ad50-4ab6cc3bb2a1","1b35ec3b-5776-48ef-b646-d5522bdeb2cc"] it is the result of 3 different test cases
         
        const testResult = await submitToken(resultToken);
 

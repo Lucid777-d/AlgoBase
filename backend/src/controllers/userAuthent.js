@@ -21,7 +21,8 @@ const register = async (req,res)=>{
 
       //Rediricting to access credentials 
      const user =  await User.create(req.body);
-     const token =  jwt.sign({_id:user._id , emailId:emailId, role:'user'},process.env.JWT_KEY,{expiresIn: 60*60});
+     const token =  jwt.sign({_id:user._id , emailId:emailId, role:'user'},process.env.JWT_KEY,{expiresIn: 60*60}); //1 day
+     //sending the data back to frontend
      const reply = {
         firstName: user.firstName,
         emailId: user.emailId,
@@ -29,7 +30,7 @@ const register = async (req,res)=>{
         role:user.role,
     }
     
-     res.cookie('token',token,{maxAge: 60*60*1000});
+     res.cookie('token',token,{maxAge: 60*60*1000});//setting the cookie up for browser for successfull requests in a valid timeline
      res.status(201).json({
         user:reply,
         message:"Loggin Successfully"
@@ -52,8 +53,9 @@ const login = async (req,res)=>{
             throw new Error("Invalid Credentials");
 
         const user = await User.findOne({emailId});
-if(!user)
-    throw new Error("Invalid Credentials");   // <-- ye line missing hai, isko add karna chahiye
+
+    if(!user)
+    throw new Error("Invalid Credentials");   
 
 const match = await bcrypt.compare(password,user.password);
 
@@ -86,13 +88,11 @@ const logout = async(req,res)=>{
 
     try{
         const {token} = req.cookies;
-        const payload = jwt.decode(token);
+        const payload = jwt.decode(token);jwt.decode(token) //takes that encoded string and converts it back into a readable JS object
  
 
         await redisClient.set(`token:${token}`,'Blocked');
-        await redisClient.expireAt(`token:${token}`,payload.exp);
-    //    Token add kar dung Redis ke blockList
-    //    Cookies ko clear kar dena.....
+        await redisClient.expireAt(`token:${token}`,payload.exp);//we are setting the expiry date as payload.exp (payload contains the data of the jwt so it contains data like id, email, expid etc.)
 
     res.cookie("token",null,{expires: new Date(Date.now())});
     res.send("Logged Out Succesfully");
@@ -103,6 +103,7 @@ const logout = async(req,res)=>{
     }
 }
 
+//separate route for admin registration
 
 const adminRegister = async(req,res)=>{
     try{
@@ -125,6 +126,8 @@ const adminRegister = async(req,res)=>{
     }
 }
 
+
+//deleting the user profile
 const deleteProfile = async(req,res)=>{
   
     try{
